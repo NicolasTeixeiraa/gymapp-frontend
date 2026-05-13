@@ -7,6 +7,11 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-auth-card-bg: var(--auth-card-bg);
+  --color-auth-card-text: var(--auth-card-text);
+  --color-auth-card-text-muted: var(--auth-card-text-muted);
+  --color-auth-google-bg: var(--auth-google-bg);
+  --color-auth-google-text: var(--auth-google-text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-inter-tight);
@@ -54,6 +59,11 @@
 
 :root {
   --radius: 0.65rem;
+  --auth-card-bg: oklch(0.50 0.27 264);
+  --auth-card-text: oklch(0.985 0 0);
+  --auth-card-text-muted: oklch(0.985 0 0 / 70%);
+  --auth-google-bg: oklch(1 0 0);
+  --auth-google-text: oklch(0.141 0.005 285.823);
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
