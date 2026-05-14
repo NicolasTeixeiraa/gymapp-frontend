@@ -24,7 +24,7 @@ export function WorkoutDayCard({ workoutDay }: Props) {
 
   return (
     <Link
-      href="#"
+      href={`/workout-plans/${workoutDay.workoutPlanId}/days/${workoutDay.id}`}
       className="relative flex h-50 w-full flex-col justify-between overflow-hidden rounded-xl p-5"
     >
       {workoutDay.coverImageUrl ? (
