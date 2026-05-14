@@ -7,8 +7,8 @@ export async function BottomNav() {
 
   let workoutDayHref: string | null = null;
   if (homeData.status === 200 && homeData.data.todayWorkoutDay) {
-    const { workoutPlanId, id } = homeData.data.todayWorkoutDay;
-    workoutDayHref = `/workout-plans/${workoutPlanId}/days/${id}`;
+    const { workoutPlanId } = homeData.data.todayWorkoutDay;
+    workoutDayHref = `/workout-plans/${workoutPlanId}`;
   }
 
   return <BottomNavLinks workoutDayHref={workoutDayHref} />;

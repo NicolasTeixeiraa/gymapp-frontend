@@ -19,8 +19,7 @@ type Props = {
 export function BottomNavLinks({ workoutDayHref }: Props) {
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const isWorkoutDay =
-    workoutDayHref !== null && pathname === workoutDayHref;
+  const isWorkoutDay = workoutDayHref !== null && pathname.startsWith(workoutDayHref);
 
   return (
     <>
