@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type GetHomeData200 } from "@/app/_lib/api/fetch-generated";
@@ -22,8 +23,8 @@ export function ConsistencyTracker({
         <p className="font-heading text-lg font-semibold text-foreground">
           Consistência
         </p>
-        <Button variant="link" className="font-heading text-xs text-primary h-auto p-0">
-          Ver histórico
+        <Button variant="link" className="font-heading text-xs text-primary h-auto p-0" asChild>
+          <Link href="/stats">Ver histórico</Link>
         </Button>
       </div>
       <div className="flex items-center gap-3">

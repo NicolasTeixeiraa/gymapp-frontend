@@ -1,21 +1,15 @@
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import dayjs from "dayjs";
 import { authClient } from "@/app/_lib/auth-client";
-import { getHomeData, GetHomeData200 } from "@/app/_lib/api/fetch-generated";
+import { getHomeData, getUserTrainData } from "@/app/_lib/api/fetch-generated";
 import { WorkoutDayCard } from "./_components/workout-day-card";
 import { BottomNav } from "./_components/bottom-nav";
-import {
-  HomeWorkoutLoadMessage,
-  type HomeWorkoutLoadIssue,
-} from "./_components/home-workout-load-message";
 import { Button } from "@/components/ui/button";
 import { ConsistencyTracker } from "./_components/consistency-tracker";
-import {
-  getWeekDates,
-  buildEmptyConsistencyByDay,
-} from "@/app/_lib/home-utils";
+import { getWeekDates } from "@/app/_lib/home-utils";
 
 export default async function Home() {
   const { data: sessionData, error: sessionError } =
@@ -27,23 +21,23 @@ export default async function Home() {
 
   const today = dayjs();
   const weekDates = getWeekDates(today);
-  const homeData = await getHomeData(today.format("YYYY-MM-DD"));
+  const [homeData, trainData] = await Promise.all([
+    getHomeData(today.format("YYYY-MM-DD")),
+    getUserTrainData(),
+  ]);
 
-  if (homeData.status === 401) redirect("/auth");
+  if (homeData.status === 401 || trainData.status === 401) redirect("/auth");
 
-  let todayWorkoutDay: GetHomeData200["todayWorkoutDay"];
-  let workoutStreak: number;
-  let consistencyByDay: GetHomeData200["consistencyByDay"];
-  let homeLoadIssue: HomeWorkoutLoadIssue | null = null;
-
-  if (homeData.status === 200) {
-    ({ todayWorkoutDay, workoutStreak, consistencyByDay } = homeData.data);
-  } else {
-    todayWorkoutDay = undefined;
-    workoutStreak = 0;
-    consistencyByDay = buildEmptyConsistencyByDay(weekDates);
-    homeLoadIssue = homeData.status === 404 ? "no-active-plan" : "server";
+  if (
+    trainData.status !== 200 ||
+    trainData.data === null ||
+    homeData.status !== 200
+  ) {
+    redirect("/onboarding");
   }
+
+  const { todayWorkoutDay, workoutStreak, consistencyByDay } = homeData.data;
+  const activePlanId = todayWorkoutDay?.workoutPlanId ?? null;
 
   return (
     <div className="flex min-h-svh flex-col pb-22 md:pb-0 md:pl-60">
@@ -71,11 +65,16 @@ export default async function Home() {
               Bora treinar hoje?
             </p>
           </div>
-          <div className="rounded-full bg-primary px-4 py-2">
-            <p className="font-heading text-sm font-semibold leading-none text-primary-foreground">
-              Bora!
-            </p>
-          </div>
+          {todayWorkoutDay && !todayWorkoutDay.isRest && (
+            <Link
+              href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`}
+              className="rounded-full bg-primary px-4 py-2"
+            >
+              <p className="font-heading text-sm font-semibold leading-none text-primary-foreground">
+                Bora!
+              </p>
+            </Link>
+          )}
         </div>
       </div>
 
@@ -94,12 +93,17 @@ export default async function Home() {
             <Button
               variant="link"
               className="font-heading text-xs text-primary h-auto p-0"
+              disabled={!activePlanId}
+              asChild={!!activePlanId}
             >
-              Ver treinos
+              {activePlanId ? (
+                <Link href={`/workout-plans/${activePlanId}`}>Ver treinos</Link>
+              ) : (
+                "Ver treinos"
+              )}
             </Button>
           </div>
           {todayWorkoutDay && <WorkoutDayCard workoutDay={todayWorkoutDay} />}
-          {homeLoadIssue && <HomeWorkoutLoadMessage issue={homeLoadIssue} />}
         </section>
       </div>
 

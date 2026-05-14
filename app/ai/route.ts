@@ -13,13 +13,15 @@ export async function POST(req: Request) {
     body,
   });
 
+  const forwardHeaders = new Headers();
+  response.headers.forEach((value, key) => {
+    if (!["content-encoding", "content-length", "transfer-encoding"].includes(key)) {
+      forwardHeaders.set(key, value);
+    }
+  });
+
   return new Response(response.body, {
     status: response.status,
-    headers: {
-      "Content-Type":
-        response.headers.get("Content-Type") ?? "text/event-stream",
-      "x-vercel-ai-data-stream":
-        response.headers.get("x-vercel-ai-data-stream") ?? "",
-    },
+    headers: forwardHeaders,
   });
 }

@@ -4,7 +4,11 @@ import dayjs from "dayjs";
 import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/app/_lib/auth-client";
-import { getStats } from "@/app/_lib/api/fetch-generated";
+import {
+  getStats,
+  getHomeData,
+  getUserTrainData,
+} from "@/app/_lib/api/fetch-generated";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { StatsHeatmap } from "./_components/stats-heatmap";
 import { buildHeatmapData, formatTotalTime } from "./_lib/stats-utils";
@@ -18,6 +22,21 @@ export default async function StatsPage() {
   if (sessionError || !sessionData?.user) redirect("/auth");
 
   const today = dayjs();
+  const [homeData, trainData] = await Promise.all([
+    getHomeData(today.format("YYYY-MM-DD")),
+    getUserTrainData(),
+  ]);
+
+  if (homeData.status === 401 || trainData.status === 401) redirect("/auth");
+
+  if (
+    trainData.status !== 200 ||
+    trainData.data === null ||
+    homeData.status !== 200
+  ) {
+    redirect("/onboarding");
+  }
+
   const from = today.subtract(2, "month").startOf("month").format("YYYY-MM-DD");
   const to = today.format("YYYY-MM-DD");
 

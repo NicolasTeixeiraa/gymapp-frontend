@@ -30,7 +30,7 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-6 rounded-tl-[20px] rounded-tr-[20px] border-t border-border bg-background px-6 py-4 md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-6 rounded-tl-[20px] rounded-tr-[20px] border-t border-border bg-background px-6 py-4 md:hidden">
         <Button
           variant="ghost"
           size="icon"
@@ -91,7 +91,7 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
         </Button>
       </nav>
 
-      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 w-60 flex-col border-r border-border bg-background px-3 py-6 gap-1">
+      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 w-60 flex-col border-r border-border bg-background px-3 py-6 gap-1">
         <p className="font-anton text-[22px] uppercase leading-none text-foreground px-3 mb-6">
           Gym App
         </p>

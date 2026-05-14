@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import dayjs from "dayjs";
 import { Calendar, Dumbbell, Timer } from "lucide-react";
 import { authClient } from "@/app/_lib/auth-client";
 import {
   getWorkoutDay,
+  getHomeData,
+  getUserTrainData,
   type GetWorkoutDay200SessionsItem,
 } from "@/app/_lib/api/fetch-generated";
 import { BottomNav } from "@/app/_components/bottom-nav";
@@ -44,6 +47,22 @@ export default async function WorkoutDayPage({
     });
 
   if (sessionError || !sessionData?.user) redirect("/auth");
+
+  const today = dayjs();
+  const [homeData, trainData] = await Promise.all([
+    getHomeData(today.format("YYYY-MM-DD")),
+    getUserTrainData(),
+  ]);
+
+  if (homeData.status === 401 || trainData.status === 401) redirect("/auth");
+
+  if (
+    trainData.status !== 200 ||
+    trainData.data === null ||
+    homeData.status !== 200
+  ) {
+    redirect("/onboarding");
+  }
 
   const workoutDayData = await getWorkoutDay(planId, dayId);
   if (workoutDayData.status === 401) redirect("/auth");
