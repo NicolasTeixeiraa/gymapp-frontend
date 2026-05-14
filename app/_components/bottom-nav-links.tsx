@@ -21,6 +21,7 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
   const isHome = pathname === "/";
   const isWorkoutDay = workoutDayHref !== null && pathname.startsWith(workoutDayHref);
   const isStats = pathname === "/stats";
+  const isProfile = pathname === "/profile";
 
   return (
     <>
@@ -71,9 +72,12 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
           variant="ghost"
           size="icon"
           aria-label="Perfil"
-          className="text-muted-foreground"
+          className={cn(isProfile ? "text-foreground" : "text-muted-foreground")}
+          asChild
         >
-          <UserRound size={24} />
+          <Link href="/profile">
+            <UserRound size={24} />
+          </Link>
         </Button>
       </nav>
 
@@ -131,12 +135,18 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
           </Link>
         </Button>
         <Button
-          variant="ghost"
-          className="w-full justify-start gap-3 font-heading font-medium text-muted-foreground"
+          variant={isProfile ? "secondary" : "ghost"}
+          className={cn(
+            "w-full justify-start gap-3 font-heading font-medium",
+            !isProfile && "text-muted-foreground",
+          )}
           aria-label="Perfil"
+          asChild
         >
-          <UserRound size={20} />
-          Perfil
+          <Link href="/profile">
+            <UserRound size={20} />
+            Perfil
+          </Link>
         </Button>
         <div className="mt-2">
           <Button
