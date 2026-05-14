@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { parseAsBoolean, useQueryState } from "nuqs";
 
 type Props = {
   workoutDayHref: string | null;
@@ -18,6 +19,10 @@ type Props = {
 
 export function BottomNavLinks({ workoutDayHref }: Props) {
   const pathname = usePathname();
+  const [, setChatOpen] = useQueryState(
+    "chat_open",
+    parseAsBoolean.withDefault(false),
+  );
   const isHome = pathname === "/";
   const isWorkoutDay = workoutDayHref !== null && pathname.startsWith(workoutDayHref);
   const isStats = pathname === "/stats";
@@ -54,7 +59,12 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
             <Calendar size={24} />
           )}
         </Button>
-        <Button size="icon" className="rounded-full size-14" aria-label="IA">
+        <Button
+          size="icon"
+          className="rounded-full size-14"
+          aria-label="IA"
+          onClick={() => setChatOpen(true)}
+        >
           <Sparkles size={24} />
         </Button>
         <Button
@@ -152,6 +162,7 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
           <Button
             className="w-full justify-start gap-3 font-heading font-medium"
             aria-label="IA"
+            onClick={() => setChatOpen(true)}
           >
             <Sparkles size={20} />
             IA

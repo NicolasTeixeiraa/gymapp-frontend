@@ -56,7 +56,7 @@ export default async function ProfilePage() {
           <div className="grid grid-cols-2 gap-3">
             <ProfileStatCard
               icon={Scale}
-              value={`${formatWeight(userData.weightInGrams)} kg`}
+              value={`${formatWeight(userData.weightInGrams / 1000)} kg`}
               label="Peso"
             />
             <ProfileStatCard

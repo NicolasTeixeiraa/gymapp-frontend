@@ -50,7 +50,9 @@ export default async function WorkoutDayPage({
   if (workoutDayData.status !== 200) return null;
 
   const workoutDay = workoutDayData.data;
-  const durationMinutes = Math.floor(workoutDay.estimatedDurationInSeconds / 60);
+  const durationMinutes = Math.floor(
+    workoutDay.estimatedDurationInSeconds / 60,
+  );
   const sessionState = getSessionState(workoutDay.sessions);
   const inProgressSession = workoutDay.sessions.find((s) => !s.completedAt);
 
