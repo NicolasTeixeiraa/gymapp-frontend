@@ -20,6 +20,7 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isWorkoutDay = workoutDayHref !== null && pathname.startsWith(workoutDayHref);
+  const isStats = pathname === "/stats";
 
   return (
     <>
@@ -59,9 +60,12 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
           variant="ghost"
           size="icon"
           aria-label="Estatísticas"
-          className="text-muted-foreground"
+          className={cn(isStats ? "text-foreground" : "text-muted-foreground")}
+          asChild
         >
-          <ChartNoAxesColumn size={24} />
+          <Link href="/stats">
+            <ChartNoAxesColumn size={24} />
+          </Link>
         </Button>
         <Button
           variant="ghost"
@@ -113,12 +117,18 @@ export function BottomNavLinks({ workoutDayHref }: Props) {
           )}
         </Button>
         <Button
-          variant="ghost"
-          className="w-full justify-start gap-3 font-heading font-medium text-muted-foreground"
+          variant={isStats ? "secondary" : "ghost"}
+          className={cn(
+            "w-full justify-start gap-3 font-heading font-medium",
+            !isStats && "text-muted-foreground",
+          )}
           aria-label="Estatísticas"
+          asChild
         >
-          <ChartNoAxesColumn size={20} />
-          Estatísticas
+          <Link href="/stats">
+            <ChartNoAxesColumn size={20} />
+            Estatísticas
+          </Link>
         </Button>
         <Button
           variant="ghost"
