@@ -29,8 +29,8 @@ const WEEKDAY_PT: Record<string, string> = {
 function getSessionState(
   sessions: GetWorkoutDay200SessionsItem[],
 ): "none" | "in-progress" | "completed" {
-  if (sessions.some((s) => s.completedAt)) return "completed";
   if (sessions.some((s) => !s.completedAt)) return "in-progress";
+  if (sessions.some((s) => s.completedAt)) return "completed";
   return "none";
 }
 

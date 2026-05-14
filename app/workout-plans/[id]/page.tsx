@@ -48,9 +48,18 @@ export default async function WorkoutPlanPage({
 
   const plan = workoutPlanData.data;
 
-  const WEEKDAY_ORDER = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
+  const WEEKDAY_ORDER = [
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+    "SUNDAY",
+  ];
   const sortedDays = [...plan.workoutDays].sort(
-    (a, b) => WEEKDAY_ORDER.indexOf(a.weekDay) - WEEKDAY_ORDER.indexOf(b.weekDay),
+    (a, b) =>
+      WEEKDAY_ORDER.indexOf(a.weekDay) - WEEKDAY_ORDER.indexOf(b.weekDay),
   );
 
   const bannerImageUrl = sortedDays.find((d) => d.coverImageUrl)?.coverImageUrl;
